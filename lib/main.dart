@@ -24,6 +24,9 @@ class _HomePageState extends State<HomePage> {
   double imcResultado = 0;
   String resultadoValue = "";
   String recomendacion = "";
+  double porBajaroSubir = 0;
+
+  String respuestaGeneral = "";
 
   @override
   Widget build(BuildContext context) {
@@ -104,19 +107,31 @@ class _HomePageState extends State<HomePage> {
                   imcResultado =
                       (pesoSlider / (heightAltura * heightAltura)) * 10000;
                   print(imcResultado);
+                  double xBajar = 0;
+                  double porBajaroSubirsobrepeso = 0;
 
-                  if (imcResultado >= 16 && imcResultado <= 18.5) {
+                  if (imcResultado <= 18.5) {
+                    double xSubir;
                     resultadoValue = "Peso Bajo";
                     recomendacion = "Necesitas Alimentarte Mejor";
+                    xSubir = 18.5 - imcResultado;
+                    porBajaroSubir = xSubir;
+                    respuestaGeneral =
+                        "Debes Subir ${porBajaroSubir.toStringAsFixed(2)} kilos para alcanzar un ICM Normal";
                   } else if (imcResultado >= 18.6 && imcResultado <= 25.0) {
                     resultadoValue = "Peso Normal";
                     recomendacion =
-                        "Estas en Optimas condiciones, Manten tu ritmo";
+                        "Estas en Optimas condiciones, Manten tu ritmo, estas con un ICM Normal";
+                    respuestaGeneral = "Manten este Ritmo";
                   } else
                     (
-                      resultadoValue = "Peso Normal",
+                      resultadoValue = "Sobre peso",
                       recomendacion =
-                          "Estas en Optimas condiciones, Manten tu ritmo",
+                          "Debes comer mas Saludable y evita Grasas",
+                      xBajar = 25.0 - imcResultado,
+                      porBajaroSubir = xBajar,
+                      respuestaGeneral =
+                          "Debes Bajar ${porBajaroSubir.toStringAsFixed(2)} Kilos para alcanzar un ICM Normal",
                     );
 
                   setState(() {});
@@ -139,6 +154,7 @@ class _HomePageState extends State<HomePage> {
                       style: TextStyle(
                         fontSize: 39.0,
                         fontWeight: FontWeight.bold,
+                        color: Colors.black87,
                       ),
                     ),
                     Text(
@@ -149,11 +165,24 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     Text(
-                      "Debes Comer Mas Saludable",
+                      recomendacion,
                       style: TextStyle(
                         color: Colors.black45,
                         fontSize: 18,
                       ),
+                    ),
+                    const SizedBox(
+                      height: 14,
+                    ),
+                    Text(
+                      respuestaGeneral,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          //color: Colors.black45,
+                          //color: porBajaroSubir<=18.5?: Color(regb) ,
+
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800),
                     ),
                     Expanded(
                       child: Image.asset(
