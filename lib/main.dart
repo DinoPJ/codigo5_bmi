@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> {
   double getdifernciaKilos() {
     double diferencia = 0;
 
-    diferencia = porBajaroSubir * pow((heightAltura * 0.01), 2);
+    diferencia = (porBajaroSubir * pow((heightAltura * 0.01), 2)) + 1;
 
     return diferencia;
   }
