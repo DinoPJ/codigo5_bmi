@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -20,13 +23,135 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   double heightAltura = 160;
-  double pesoSlider = 0;
-  double imcResultado = 0;
-  String resultadoValue = "";
-  String recomendacion = "";
+  double weightPesoSlider = 85.7;
+  //double bmiResultado = 0;//////////////////////////////////////////////////////////////////////
+
+  //                                  String resultadoValue = "";
+  //                                String recomendacion = "";
   double porBajaroSubir = 0;
 
-  String respuestaGeneral = "";
+  //                              String respuestaGeneral = "";
+
+  //int imagenNumero = 1;
+
+  //                          void calculate() {
+  //                           bmiResultado = (weightPesoSlider / (heightAltura * heightAltura)) * 10000;
+  //                           print(bmiResultado);
+  //                           double xBajar = 0;
+  //                           double porBajaroSubirsobrepeso = 0;
+//
+  //                                    if (bmiResultado <= 18.5) {
+  //                                    double xSubir;
+  //                                  resultadoValue = "Peso Bajo";
+  //                                recomendacion = "Necesitas Alimentarte Mejor";
+  //                              xSubir = 18.5 - bmiResultado;
+  //                            porBajaroSubir = xSubir;
+  //                          respuestaGeneral =
+  //                            "Debes Subir ${porBajaroSubir.toStringAsFixed(2)} kilos para alcanzar un ICM Normal";
+  //                      imagenNumero = 2;
+  //                  } else if (bmiResultado >= 18.6 && bmiResultado <= 25.0) {
+  //                  resultadoValue = "Peso Normal";
+  //                recomendacion =
+  //                  "Estas en Optimas condiciones, Manten tu ritmo, estas con un ICM Normal";
+  //                                       respuestaGeneral = "Manten este Ritmo";
+  //                                     imagenNumero = 1;
+  //                                 } else {
+  //                                 resultadoValue = "Sobre peso";
+  //                               recomendacion = "Debes comer mas Saludable y evita Grasas";
+  //                             xBajar = 25.0 - bmiResultado;
+  //                           porBajaroSubir = xBajar;
+  //                         respuestaGeneral =
+  //                           "Debes Bajar ${porBajaroSubir.toStringAsFixed(2)} Kilos para alcanzar un ICM Normal";
+  //                     imagenNumero = 4;
+  //                 }
+  //               ;
+//
+  //                                    setState(() {});
+  //                                }
+
+  double calcularBmi() {
+    return weightPesoSlider / pow((heightAltura * 0.01), 2);
+  }
+
+//get significa OBTENER O CONSEGUIR
+  String getResultado() {
+    //bajo peso, norma y sobre peso
+
+    double bmi = calcularBmi();
+    String result = "";
+
+    if (bmi < 18.5) {
+      result = "Bajo Peso";
+    } else if (bmi < 25) {
+      result = "Peso Normal";
+    } else {
+      result = "Sobre Peso";
+    }
+
+    return result;
+  }
+
+  String getRecomendacion() {
+    //bajo peso, norma y sobre peso
+
+    double bmi = calcularBmi();
+    String result = "";
+
+    if (bmi < 18.5) {
+      result = "Debes de Comer mas sano y hacer mas Ejercicio.";
+    } else if (bmi < 25) {
+      result = "Todo esta muy bien, sigue ese ritmo";
+    } else {
+      result =
+          "Debes de Comer mas Saludable y hacer ejercicios minimo 5 horas Diarias.";
+    }
+
+    return result;
+  }
+
+  int getImage() {
+    double bmi = calcularBmi();
+    int resultado = 0;
+
+    if (bmi < 18.5) {
+      resultado = 2;
+    } else if (bmi < 25) {
+      resultado = 3;
+    } else {
+      resultado = 4;
+    }
+
+    return resultado;
+  }
+
+  double getdifernciaKilos() {
+    double diferencia = 0;
+
+    diferencia = porBajaroSubir * pow((heightAltura * 0.01), 2);
+
+    return diferencia;
+  }
+
+  String getPesoxModificar() {
+    double bmi = calcularBmi();
+    double difereciaBmi = 0;
+    String respuestageneral = "";
+
+    if (bmi < 18.5) {
+      difereciaBmi = (bmi - 18.5) * -1;
+      respuestageneral =
+          "Tienes una subir unos ${getdifernciaKilos().toStringAsFixed(2)} kilos, para ingresar al IMC Normal.";
+    } else if (bmi < 25) {
+      respuestageneral = "Sigue asi y Manten tu Ritmo.";
+    } else {
+      difereciaBmi = bmi - 25;
+      respuestageneral =
+          "Tienes que bajar unos ${getdifernciaKilos().toStringAsFixed(2)} kilos, para Ingresar al IMC normal";
+    }
+
+    porBajaroSubir = difereciaBmi;
+    return respuestageneral;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +189,10 @@ class _HomePageState extends State<HomePage> {
             Slider(
                 value: heightAltura,
                 min: 50,
-                max: 250,
+                max: 230,
                 onChanged: (double mandarina) {
                   heightAltura = mandarina;
+
                   setState(() {});
                 }),
             const Text("Peso: "),
@@ -77,7 +203,7 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Text(
                   //heightAltura.toInt().toString(),
-                  pesoSlider.toStringAsFixed(1),
+                  weightPesoSlider.toStringAsFixed(1),
                   style: TextStyle(fontSize: 32, fontWeight: FontWeight.w700),
                 ),
                 Text(
@@ -89,11 +215,12 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             Slider(
-                value: pesoSlider,
+                value: weightPesoSlider,
                 min: 0,
-                max: 200,
+                max: 130,
                 onChanged: (double mandarina) {
-                  pesoSlider = mandarina;
+                  weightPesoSlider = mandarina;
+
                   setState(() {});
                 }),
             SizedBox(
@@ -104,37 +231,7 @@ class _HomePageState extends State<HomePage> {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  imcResultado =
-                      (pesoSlider / (heightAltura * heightAltura)) * 10000;
-                  print(imcResultado);
-                  double xBajar = 0;
-                  double porBajaroSubirsobrepeso = 0;
-
-                  if (imcResultado <= 18.5) {
-                    double xSubir;
-                    resultadoValue = "Peso Bajo";
-                    recomendacion = "Necesitas Alimentarte Mejor";
-                    xSubir = 18.5 - imcResultado;
-                    porBajaroSubir = xSubir;
-                    respuestaGeneral =
-                        "Debes Subir ${porBajaroSubir.toStringAsFixed(2)} kilos para alcanzar un ICM Normal";
-                  } else if (imcResultado >= 18.6 && imcResultado <= 25.0) {
-                    resultadoValue = "Peso Normal";
-                    recomendacion =
-                        "Estas en Optimas condiciones, Manten tu ritmo, estas con un ICM Normal";
-                    respuestaGeneral = "Manten este Ritmo";
-                  } else
-                    (
-                      resultadoValue = "Sobre peso",
-                      recomendacion =
-                          "Debes comer mas Saludable y evita Grasas",
-                      xBajar = 25.0 - imcResultado,
-                      porBajaroSubir = xBajar,
-                      respuestaGeneral =
-                          "Debes Bajar ${porBajaroSubir.toStringAsFixed(2)} Kilos para alcanzar un ICM Normal",
-                    );
-
-                  setState(() {});
+                  ;
                 },
                 child: Text("Calcular IBM"),
               ),
@@ -150,7 +247,7 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   children: [
                     Text(
-                      imcResultado.toStringAsFixed(2),
+                      calcularBmi().toStringAsFixed(2),
                       style: TextStyle(
                         fontSize: 39.0,
                         fontWeight: FontWeight.bold,
@@ -158,14 +255,15 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     Text(
-                      resultadoValue,
+                      getResultado(),
                       style: TextStyle(
                         fontSize: 22,
                         color: Colors.indigo,
                       ),
                     ),
                     Text(
-                      recomendacion,
+                      getRecomendacion(),
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.black45,
                         fontSize: 18,
@@ -175,7 +273,7 @@ class _HomePageState extends State<HomePage> {
                       height: 14,
                     ),
                     Text(
-                      respuestaGeneral,
+                      getPesoxModificar(),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           //color: Colors.black45,
@@ -186,7 +284,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Expanded(
                       child: Image.asset(
-                        "assets/images/imagen1.png",
+                        "assets/imagenes/imagen${getImage()}.png",
                       ),
                     ),
                   ],
